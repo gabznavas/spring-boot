@@ -20,10 +20,6 @@ public class MathController {
         return convertToDouble(numberOne) + convertToDouble(numberTwo);
     }
 
-    /* TODO: Desafios
-    // http://localhost:8080/math/squareRoot/81
-    */
-
     // http://localhost:8080/math/subtraction/3/5
     @RequestMapping("/subtraction/{numberOne}/{numberTwo}")
     public Double subtraction(
@@ -62,6 +58,15 @@ public class MathController {
         Double numberOne = convertToDouble(strNumberOne);
         Double numberTwo = convertToDouble(strNumberTwo);
         return (numberOne + numberTwo) / 2;
+    }
+
+    // http://localhost:8080/math/squareRoot/81
+    @RequestMapping("/squareRoot/{number}")
+    public Double squareRoot(
+            @PathVariable("number") String strNumber
+    ) {
+        Double number = convertToDouble(strNumber);
+        return Math.sqrt(number);
     }
 
     private Double convertToDouble(String strNumber) {
