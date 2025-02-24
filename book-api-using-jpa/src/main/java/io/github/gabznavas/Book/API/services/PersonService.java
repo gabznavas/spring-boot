@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -33,12 +32,8 @@ public class PersonService {
     public Person update(Long id, Person personToUpdate) {
         logger.info("Updating all People!");
 
-        Optional<Person> personOptional = personRepository.findById(id);
-        if (personOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Pessoa não encontrada.");
-        }
-
-        Person person = personOptional.get();
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this id."));
 
         person.setFirstName(personToUpdate.getFirstName());
         person.setLastName(personToUpdate.getLastName());
@@ -51,21 +46,16 @@ public class PersonService {
     public void delete(Long id) {
         logger.info("Deleting all People!");
 
-        Optional<Person> personOptional = personRepository.findById(id);
-        if (personOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Pessoa não encontrada.");
-        }
-        Person person = personOptional.get();
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this id."));
+
         personRepository.delete(person);
     }
 
 
     public Person findById(Long id) {
-        Optional<Person> personOptional = personRepository.findById(id);
-        if (personOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Pessoa não encontrada.");
-        }
-        return personOptional.get();
+        return personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this id."));
     }
 
     public List<Person> findAll() {
