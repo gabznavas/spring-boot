@@ -1,5 +1,6 @@
 package io.github.gabznavas.math.controllers;
 
+import io.github.gabznavas.math.exceptions.UnsupportedMathOperationException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,16 +17,13 @@ public class MathController {
             String numberOne,
             @PathVariable("numberTwo")
             String numberTwo
-    ) throws Exception {
-        if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new IllegalArgumentException();
-        }
+    ) {
         return convertToDouble(numberOne) + convertToDouble(numberTwo);
     }
 
     private Double convertToDouble(String strNumber) {
-        if(strNumber == null || strNumber.isEmpty()) {
-            throw new IllegalArgumentException();
+        if(!isNumeric(strNumber)) {
+            throw new UnsupportedMathOperationException("Please set a numeric value.");
         }
         return Double.parseDouble(strNumber);
     }
