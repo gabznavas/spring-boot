@@ -21,9 +21,10 @@ spring:
       # - create-drop: cria o schema e apaga ao encerrar a app
       # - validate: valida o schema existente sem alter�-lo
       # - none: desativa o gerenciamento de schema
+
+    # não remover essa prop
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect # Dialeto do Hibernate para o MySQL 8
     show-sql: false # Exibe as queries SQL no console (�til para debug se ativado)
     open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em produ��o
 
@@ -33,7 +34,8 @@ logging:
     # aplicação inteira
     root: WARN
     # somente na API
-    #    io.github.gabznavas.Book.API: DEBUG
-    io.github.gabznavas.Book.API: DEBUG
+#    io.github.gabznavas.Book.API: TRACE
+#    io.github.gabznavas.Book.API: DEBUG
+#    io.github.gabznavas.Book.API: DEBUG
 #    io.github.gabznavas.Book.API: WARN
 #    io.github.gabznavas.Book.API: ERROR
