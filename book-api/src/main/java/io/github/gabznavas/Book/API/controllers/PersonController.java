@@ -32,7 +32,7 @@ public class PersonController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public Person update(@PathParam("id") String id, @RequestBody() Person person) {
+    public Person update(@PathVariable("id") String id, @RequestBody() Person person) {
         return personService.update(id, person);
     }
 
@@ -40,7 +40,7 @@ public class PersonController {
             value = "/{id}",
             method = RequestMethod.DELETE
     )
-    public void delete(@PathParam("id") String id) {
+    public void delete(@PathVariable("id") String id) {
          personService.delete(id);
     }
 
