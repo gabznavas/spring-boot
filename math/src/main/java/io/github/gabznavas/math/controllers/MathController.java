@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/math")
 public class MathController {
+    private SimpleMath math = new SimpleMath();
+
     // http://localhost:8080/math/sum/3/5
     @RequestMapping("/sum/{numberOne}/{numberTwo}")
     public Double sum(
@@ -17,7 +19,7 @@ public class MathController {
     ) {
         Double numberOne = NumberConverter.convertToDouble(strNumberOne);
         Double numberTwo = NumberConverter.convertToDouble(strNumberTwo);
-        return SimpleMath.sum(numberOne, numberTwo);
+        return math.sum(numberOne, numberTwo);
     }
 
     // http://localhost:8080/math/subtraction/3/5
@@ -28,7 +30,7 @@ public class MathController {
     ) {
         Double numberOne = NumberConverter.convertToDouble(strNumberOne);
         Double numberTwo = NumberConverter.convertToDouble(strNumberTwo);
-        return SimpleMath.subtract(numberOne, numberTwo);
+        return math.subtract(numberOne, numberTwo);
     }
 
     // http://localhost:8080/math/multiplication/3/5
@@ -39,7 +41,7 @@ public class MathController {
     ) {
         Double numberOne = NumberConverter.convertToDouble(strNumberOne);
         Double numberTwo = NumberConverter.convertToDouble(strNumberTwo);
-        return SimpleMath.multiply(numberOne, numberTwo);
+        return math.multiply(numberOne, numberTwo);
     }
 
     // http://localhost:8080/math/division/3/5
@@ -50,7 +52,7 @@ public class MathController {
     ) {
         Double numberOne = NumberConverter.convertToDouble(strNumberOne);
         Double numberTwo = NumberConverter.convertToDouble(strNumberTwo);
-        return SimpleMath.divide(numberOne, numberTwo);
+        return math.divide(numberOne, numberTwo);
     }
 
     // http://localhost:8080/math/mean/3/5
@@ -61,7 +63,7 @@ public class MathController {
     ) {
         Double numberOne = NumberConverter.convertToDouble(strNumberOne);
         Double numberTwo = NumberConverter.convertToDouble(strNumberTwo);
-        return SimpleMath.mean(numberOne, numberTwo);
+        return math.mean(numberOne, numberTwo);
     }
 
     // http://localhost:8080/math/squareRoot/81
@@ -70,6 +72,6 @@ public class MathController {
             @PathVariable("number") String strNumber
     ) {
         double number = NumberConverter.convertToDouble(strNumber);
-        return SimpleMath.squareRoot(number);
+        return math.squareRoot(number);
     }
 }
