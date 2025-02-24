@@ -23,7 +23,6 @@ public class MathController {
 
     /* TODO: Desafios
 
-    // http://localhost:8080/math/multiplication/3/5
     // http://localhost:8080/math/division/3/5
     // http://localhost:8080/math/mean/3/5
     // http://localhost:8080/math/squareRoot/81
@@ -40,6 +39,16 @@ public class MathController {
         return convertToDouble(numberOne) - convertToDouble(numberTwo);
     }
 
+    // http://localhost:8080/math/multiplication/3/5
+    @RequestMapping("/multiplication/{numberOne}/{numberTwo}")
+    public Double multiplication(
+            @PathVariable("numberOne")
+                    String numberOne,
+            @PathVariable("numberTwo")
+                    String numberTwo
+    ) {
+        return convertToDouble(numberOne) * convertToDouble(numberTwo);
+    }
 
     private Double convertToDouble(String strNumber) {
         if(!isNumeric(strNumber)) {
