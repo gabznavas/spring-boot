@@ -5,8 +5,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC para conex�o com o MySQL
     url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC # URL de conex�o com o banco de dados
-      # - 127.0.0.1: endere�o do banco (localhost)
-      # - 3307: porta do MySQL
+    # - 127.0.0.1: endere�o do banco (localhost)
+    # - 3307: porta do MySQL
     # - book-api: nome do banco de dados
     # - useSSL=false: desativa SSL para evitar problemas de certificado em dev
     # - serverTimezone=UTC: define o fuso hor�rio para evitar warnings
@@ -16,8 +16,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update # Estrat�gia de cria��o/atualiza��o do schema do banco
-        # - update: atualiza o schema sem apagar dados
-        # - create: cria o schema do zero em cada inicializa��o
+      # - update: atualiza o schema sem apagar dados
+      # - create: cria o schema do zero em cada inicializa��o
       # - create-drop: cria o schema e apaga ao encerrar a app
       # - validate: valida o schema existente sem alter�-lo
       # - none: desativa o gerenciamento de schema
@@ -27,6 +27,7 @@ spring:
     show-sql: false # Exibe as queries SQL no console (�til para debug se ativado)
     open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em produ��o
 
+# Isso exibirá todos os logs do pacote no nível DEBUG e superior (INFO, WARN, ERROR)
 logging:
   level:
-    io/github/gabznavas/Book/API: DEBUG
+    io.github.gabznavas.Book.API: DEBUG
