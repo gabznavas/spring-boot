@@ -1,27 +1,28 @@
 spring:
   application:
-    name: Book-API # Nome da aplicação usado em logs e monitoramento
+    name: Book-API # Nome da aplicação, usado em logs e ferramentas de monitoramento
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC do MySQL
-    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC # URL de conexão com o banco:
+    driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC para conexão com o MySQL
+    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC # URL de conexão com o banco de dados
       # - 127.0.0.1: endereço do banco (localhost)
-      # - 3307: porta do banco MySQL
+      # - 3307: porta do MySQL
       # - book-api: nome do banco de dados
-    # - useSSL=false: desativa SSL
-    # - serverTimezone=UTC: define o fuso horário
-    username: root # Usuário do banco
-    password: rootpassword # Senha do banco
+    # - useSSL=false: desativa SSL para evitar problemas de certificado em dev
+    # - serverTimezone=UTC: define o fuso horário para evitar warnings
+    username: root # Usuário do banco de dados
+    password: rootpassword # Senha do banco de dados
 
   jpa:
     hibernate:
-      ddl-auto: update # Controla o schema do banco:
-        # - update: atualiza o schema conforme as entidades
-        # - create: cria o schema do zero a cada inicialização
-        # - create-drop: cria e apaga o schema ao encerrar
-      # - validate: apenas valida o schema existente
+      ddl-auto: update # Estratégia de criação/atualização do schema do banco
+        # - update: atualiza o schema sem apagar dados
+        # - create: cria o schema do zero em cada inicialização
+        # - create-drop: cria o schema e apaga ao encerrar a app
+      # - validate: valida o schema existente sem alterá-lo
       # - none: desativa o gerenciamento de schema
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect # Dialeto do Hibernate para MySQL 8
-    show-sql: false # Define se as queries SQL serão exibidas no console (true/false)
+        dialect: org.hibernate.dialect.MySQL8Dialect # Dialeto do Hibernate para o MySQL 8
+    show-sql: false # Exibe as queries SQL no console (útil para debug se ativado)
+    open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em produção
