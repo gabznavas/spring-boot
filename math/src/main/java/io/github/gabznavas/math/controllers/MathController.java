@@ -21,9 +21,6 @@ public class MathController {
     }
 
     /* TODO: Desafios
-
-    // http://localhost:8080/math/division/3/5
-    // http://localhost:8080/math/mean/3/5
     // http://localhost:8080/math/squareRoot/81
     */
 
@@ -54,6 +51,17 @@ public class MathController {
             @PathVariable("numberTwo") String numberTwo
     ) {
         return convertToDouble(numberOne) / convertToDouble(numberTwo);
+    }
+
+    // http://localhost:8080/math/mean/3/5
+    @RequestMapping("/mean/{numberOne}/{numberTwo}")
+    public Double mean(
+            @PathVariable("numberOne") String strNumberOne,
+            @PathVariable("numberTwo") String strNumberTwo
+    ) {
+        Double numberOne = convertToDouble(strNumberOne);
+        Double numberTwo = convertToDouble(strNumberTwo);
+        return (numberOne + numberTwo) / 2;
     }
 
     private Double convertToDouble(String strNumber) {
