@@ -22,9 +22,14 @@ public class PersonService {
     }
 
     public Person update(String id, Person person) {
-        logger.info("Finding all People!");
+        logger.info("Updating all People!");
         return person;
     }
+
+    public void delete(String id) {
+        logger.info("Deleting all People!");
+    }
+
 
     public Person findById(String id) {
         logger.info("Finding one Person!");

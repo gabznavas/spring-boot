@@ -36,6 +36,15 @@ public class PersonController {
         return personService.update(id, person);
     }
 
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.DELETE
+    )
+    public void delete(@PathParam("id") String id) {
+         personService.delete(id);
+    }
+
+
     @RequestMapping(value = "/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE
