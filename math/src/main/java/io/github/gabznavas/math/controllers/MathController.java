@@ -66,7 +66,7 @@ public class MathController {
     }
 
     // http://localhost:8080/math/squareRoot/81
-    @RequestMapping("/squareRoot/{number}")
+    @RequestMapping("/square-root/{number}")
     public Double squareRoot(
             @PathVariable("number") String strNumber
     ) {
