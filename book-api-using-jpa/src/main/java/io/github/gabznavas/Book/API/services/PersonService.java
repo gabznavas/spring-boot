@@ -4,11 +4,12 @@ package io.github.gabznavas.Book.API.services;
 import io.github.gabznavas.Book.API.exceptions.ResourceNotFoundException;
 import io.github.gabznavas.Book.API.models.Person;
 import io.github.gabznavas.Book.API.repositories.PersonRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
 public class PersonService {
@@ -16,7 +17,7 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    private Logger logger = Logger.getLogger(PersonService.class.getName());
+    private Logger logger = LoggerFactory.getLogger(PersonService.class.getName());
 
     public Person create(Person person) {
         logger.info("Create one Person!");

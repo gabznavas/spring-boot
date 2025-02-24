@@ -1,28 +1,32 @@
 spring:
   application:
-    name: Book-API # Nome da aplicação, usado em logs e ferramentas de monitoramento
+    name: Book-API # Nome da aplicaï¿½ï¿½o, usado em logs e ferramentas de monitoramento
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC para conexão com o MySQL
-    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC # URL de conexão com o banco de dados
-      # - 127.0.0.1: endereço do banco (localhost)
+    driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC para conexï¿½o com o MySQL
+    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC # URL de conexï¿½o com o banco de dados
+      # - 127.0.0.1: endereï¿½o do banco (localhost)
       # - 3307: porta do MySQL
-      # - book-api: nome do banco de dados
+    # - book-api: nome do banco de dados
     # - useSSL=false: desativa SSL para evitar problemas de certificado em dev
-    # - serverTimezone=UTC: define o fuso horário para evitar warnings
-    username: root # Usuário do banco de dados
+    # - serverTimezone=UTC: define o fuso horï¿½rio para evitar warnings
+    username: root # Usuï¿½rio do banco de dados
     password: rootpassword # Senha do banco de dados
 
   jpa:
     hibernate:
-      ddl-auto: update # Estratégia de criação/atualização do schema do banco
+      ddl-auto: update # Estratï¿½gia de criaï¿½ï¿½o/atualizaï¿½ï¿½o do schema do banco
         # - update: atualiza o schema sem apagar dados
-        # - create: cria o schema do zero em cada inicialização
-        # - create-drop: cria o schema e apaga ao encerrar a app
-      # - validate: valida o schema existente sem alterá-lo
+        # - create: cria o schema do zero em cada inicializaï¿½ï¿½o
+      # - create-drop: cria o schema e apaga ao encerrar a app
+      # - validate: valida o schema existente sem alterï¿½-lo
       # - none: desativa o gerenciamento de schema
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect # Dialeto do Hibernate para o MySQL 8
-    show-sql: false # Exibe as queries SQL no console (útil para debug se ativado)
-    open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em produção
+    show-sql: false # Exibe as queries SQL no console (ï¿½til para debug se ativado)
+    open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em produï¿½ï¿½o
+
+logging:
+  level:
+    io/github/gabznavas/Book/API: DEBUG
