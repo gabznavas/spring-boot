@@ -15,6 +15,12 @@ public class PersonService {
     private final AtomicLong counter = new AtomicLong();
     private Logger logger = Logger.getLogger(PersonService.class.getName());
 
+        public Person create(Person person) {
+            logger.info("Create one Person!");
+            person.setId(counter.incrementAndGet());
+            return person;
+        }
+
     public Person findById(String id) {
         logger.info("Finding one Person!");
         return mockPerson();
