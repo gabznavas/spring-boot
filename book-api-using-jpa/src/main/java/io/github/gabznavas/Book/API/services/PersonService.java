@@ -3,7 +3,6 @@ package io.github.gabznavas.Book.API.services;
 
 import io.github.gabznavas.Book.API.data.dto.PersonDTO;
 import io.github.gabznavas.Book.API.exceptions.ResourceNotFoundException;
-import io.github.gabznavas.Book.API.mapper.ObjectMapper;
 import io.github.gabznavas.Book.API.models.Person;
 import io.github.gabznavas.Book.API.repositories.PersonRepository;
 import org.slf4j.Logger;
@@ -12,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static io.github.gabznavas.Book.API.mapper.ObjectMapper.parseListObjects;
+import static io.github.gabznavas.Book.API.mapper.ObjectMapper.parseObject;
 
 @Service
 public class PersonService {
@@ -29,7 +31,7 @@ public class PersonService {
         newPerson.setAddress(person.getAddress());
         newPerson.setGender(person.getGender());
         Person personCreated = personRepository.save(newPerson);
-        return ObjectMapper.parseObject(personCreated, PersonDTO.class);
+        return parseObject(personCreated, PersonDTO.class);
     }
 
     public PersonDTO update(Long id, PersonDTO dto) {
@@ -44,7 +46,7 @@ public class PersonService {
         person.setGender(dto.getGender());
 
         Person personUpdated = personRepository.save(person);
-        return ObjectMapper.parseObject(personUpdated, PersonDTO.class);
+        return parseObject(personUpdated, PersonDTO.class);
     }
 
     public void delete(Long id) {
@@ -60,11 +62,11 @@ public class PersonService {
     public PersonDTO findById(Long id) {
         Person personFound = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id."));
-        return ObjectMapper.parseObject(personFound, PersonDTO.class);
+        return parseObject(personFound, PersonDTO.class);
     }
 
     public List<PersonDTO> findAll() {
         List<Person> people = personRepository.findAll().stream().toList();
-        return ObjectMapper.parseListObjects(people, PersonDTO.class);
+        return parseListObjects(people, PersonDTO.class);
     }
 }
