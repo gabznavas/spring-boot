@@ -43,10 +43,15 @@ public class MathController {
     // http://localhost:8080/math/division/3/5
     @RequestMapping("/division/{numberOne}/{numberTwo}")
     public Double division(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
+            @PathVariable("numberOne") String strNumberOne,
+            @PathVariable("numberTwo") String strNumberTwo
     ) {
-        return convertToDouble(numberOne) / convertToDouble(numberTwo);
+        Double numberOne = convertToDouble(strNumberOne);
+        Double numberTwo = convertToDouble(strNumberTwo);
+        if (numberTwo == 0) {
+            throw new UnsupportedMathOperationException("0 is not a valid divisor.");
+        }
+        return numberOne / numberTwo;
     }
 
     // http://localhost:8080/math/mean/3/5
@@ -65,13 +70,16 @@ public class MathController {
     public Double squareRoot(
             @PathVariable("number") String strNumber
     ) {
-        Double number = convertToDouble(strNumber);
+        double number = convertToDouble(strNumber);
+        if (number < 0) {
+            throw new UnsupportedMathOperationException("Please set a zero or positive number");
+        }
         return Math.sqrt(number);
     }
 
     private Double convertToDouble(String strNumber) {
         if (!isNumeric(strNumber)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value.");
+            throw new UnsupportedMathOperationException("Please set a numeric value");
         }
         return Double.parseDouble(strNumber);
     }
