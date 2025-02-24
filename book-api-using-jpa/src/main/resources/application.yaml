@@ -1,17 +1,27 @@
 spring:
   application:
-    name: Book-API
+    name: Book-API # Nome da aplicação usado em logs e monitoramento
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC
-    username: root
-    password: rootpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC do MySQL
+    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC # URL de conexão com o banco:
+      # - 127.0.0.1: endereço do banco (localhost)
+      # - 3307: porta do banco MySQL
+      # - book-api: nome do banco de dados
+    # - useSSL=false: desativa SSL
+    # - serverTimezone=UTC: define o fuso horário
+    username: root # Usuário do banco
+    password: rootpassword # Senha do banco
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update # Controla o schema do banco:
+        # - update: atualiza o schema conforme as entidades
+        # - create: cria o schema do zero a cada inicialização
+        # - create-drop: cria e apaga o schema ao encerrar
+      # - validate: apenas valida o schema existente
+      # - none: desativa o gerenciamento de schema
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect # Dialeto do Hibernate para MySQL 8
+    show-sql: false # Define se as queries SQL serão exibidas no console (true/false)
