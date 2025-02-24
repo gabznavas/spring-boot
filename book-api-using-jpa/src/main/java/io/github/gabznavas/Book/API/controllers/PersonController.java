@@ -1,6 +1,6 @@
 package io.github.gabznavas.Book.API.controllers;
 
-import io.github.gabznavas.Book.API.models.Person;
+import io.github.gabznavas.Book.API.data.dto.PersonDTO;
 import io.github.gabznavas.Book.API.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +21,8 @@ public class PersonController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Person> create(@RequestBody Person person) {
-        final Person createdPerson = personService.create(person);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPerson);
+    public ResponseEntity<PersonDTO> create(@RequestBody PersonDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(dto));
     }
 
     @PutMapping(
@@ -31,8 +30,8 @@ public class PersonController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody() Person person) {
-        personService.update(id, person);
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody() PersonDTO dto) {
+        personService.update(id, dto);
         return ResponseEntity.noContent().build();
     }
 
@@ -46,15 +45,13 @@ public class PersonController {
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Person> findById(@PathVariable("id") Long id) {
-        final Person personFound = personService.findById(id);
-        return ResponseEntity.ok(personFound);
+    public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(personService.findById(id));
     }
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Person>> findAll() {
-        final List<Person> people = personService.findAll();
-        return ResponseEntity.ok(people);
+    public ResponseEntity<List<PersonDTO>> findAll() {
+        return ResponseEntity.ok(personService.findAll());
     }
 }

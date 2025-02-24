@@ -1,7 +1,9 @@
 package io.github.gabznavas.Book.API.services;
 
 
+import io.github.gabznavas.Book.API.data.dto.PersonDTO;
 import io.github.gabznavas.Book.API.exceptions.ResourceNotFoundException;
+import io.github.gabznavas.Book.API.mapper.ObjectMapper;
 import io.github.gabznavas.Book.API.models.Person;
 import io.github.gabznavas.Book.API.repositories.PersonRepository;
 import org.slf4j.Logger;
@@ -17,31 +19,32 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    private Logger logger = LoggerFactory.getLogger(PersonService.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(PersonService.class.getName());
 
-    public Person create(Person person) {
+    public PersonDTO create(PersonDTO person) {
         logger.info("Create one Person!");
         Person newPerson = new Person();
-        newPerson.setFirstName("Gabz");
-        newPerson.setLastName("Navas");
-        newPerson.setAddress("Rua das Galinhas, 123 - São Paulo - Brasil");
-        newPerson.setGender("Male");
-        newPerson = personRepository.save(person);
-        return newPerson;
+        newPerson.setFirstName(person.getFirstName());
+        newPerson.setLastName(person.getLastName());
+        newPerson.setAddress(person.getAddress());
+        newPerson.setGender(person.getGender());
+        Person personCreated = personRepository.save(newPerson);
+        return ObjectMapper.parseObject(personCreated, PersonDTO.class);
     }
 
-    public Person update(Long id, Person personToUpdate) {
+    public PersonDTO update(Long id, PersonDTO dto) {
         logger.info("Updating all People!");
 
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id."));
 
-        person.setFirstName(personToUpdate.getFirstName());
-        person.setLastName(personToUpdate.getLastName());
-        person.setAddress(personToUpdate.getAddress());
-        person.setGender(personToUpdate.getGender());
+        person.setFirstName(dto.getFirstName());
+        person.setLastName(dto.getLastName());
+        person.setAddress(dto.getAddress());
+        person.setGender(dto.getGender());
 
-        return personRepository.save(person);
+        Person personUpdated = personRepository.save(person);
+        return ObjectMapper.parseObject(personUpdated, PersonDTO.class);
     }
 
     public void delete(Long id) {
@@ -54,12 +57,14 @@ public class PersonService {
     }
 
 
-    public Person findById(Long id) {
-        return personRepository.findById(id)
+    public PersonDTO findById(Long id) {
+        Person personFound = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id."));
+        return ObjectMapper.parseObject(personFound, PersonDTO.class);
     }
 
-    public List<Person> findAll() {
-        return personRepository.findAll().stream().toList();
+    public List<PersonDTO> findAll() {
+        List<Person> people = personRepository.findAll().stream().toList();
+        return ObjectMapper.parseListObjects(people, PersonDTO.class);
     }
 }

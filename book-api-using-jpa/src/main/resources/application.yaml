@@ -34,7 +34,7 @@ logging:
     # aplicação inteira
     root: WARN
     # somente na API
-#    io.github.gabznavas.Book.API: TRACE
+    #    io.github.gabznavas.Book.API: TRACE
 #    io.github.gabznavas.Book.API: DEBUG
 #    io.github.gabznavas.Book.API: DEBUG
 #    io.github.gabznavas.Book.API: WARN
