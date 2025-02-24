@@ -21,6 +21,26 @@ public class MathController {
         return convertToDouble(numberOne) + convertToDouble(numberTwo);
     }
 
+    /* TODO: Desafios
+
+    // http://localhost:8080/math/multiplication/3/5
+    // http://localhost:8080/math/division/3/5
+    // http://localhost:8080/math/mean/3/5
+    // http://localhost:8080/math/squareRoot/81
+    */
+
+    // http://localhost:8080/math/subtraction/3/5
+    @RequestMapping("/subtraction/{numberOne}/{numberTwo}")
+    public Double subtraction(
+            @PathVariable("numberOne")
+            String numberOne,
+            @PathVariable("numberTwo")
+            String numberTwo
+    ) {
+        return convertToDouble(numberOne) - convertToDouble(numberTwo);
+    }
+
+
     private Double convertToDouble(String strNumber) {
         if(!isNumeric(strNumber)) {
             throw new UnsupportedMathOperationException("Please set a numeric value.");
