@@ -3,7 +3,6 @@ package io.github.gabznavas.math.controllers;
 import io.github.gabznavas.math.exceptions.UnsupportedMathOperationException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,23 +41,30 @@ public class MathController {
     // http://localhost:8080/math/multiplication/3/5
     @RequestMapping("/multiplication/{numberOne}/{numberTwo}")
     public Double multiplication(
-            @PathVariable("numberOne")
-                    String numberOne,
-            @PathVariable("numberTwo")
-                    String numberTwo
+            @PathVariable("numberOne") String numberOne,
+            @PathVariable("numberTwo") String numberTwo
     ) {
         return convertToDouble(numberOne) * convertToDouble(numberTwo);
     }
 
+    // http://localhost:8080/math/division/3/5
+    @RequestMapping("/division/{numberOne}/{numberTwo}")
+    public Double division(
+            @PathVariable("numberOne") String numberOne,
+            @PathVariable("numberTwo") String numberTwo
+    ) {
+        return convertToDouble(numberOne) / convertToDouble(numberTwo);
+    }
+
     private Double convertToDouble(String strNumber) {
-        if(!isNumeric(strNumber)) {
+        if (!isNumeric(strNumber)) {
             throw new UnsupportedMathOperationException("Please set a numeric value.");
         }
         return Double.parseDouble(strNumber);
     }
 
     private boolean isNumeric(String strNumber) {
-        if(strNumber == null || strNumber.isEmpty()) {
+        if (strNumber == null || strNumber.isEmpty()) {
             return false;
         }
         String number = strNumber.replace(",", "."); // R$5,00 USD 5.0
