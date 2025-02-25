@@ -1,7 +1,7 @@
 package io.github.gabznavas.Book.API.unittests.mapper.mocks;
 
 
-import io.github.gabznavas.Book.API.data.dto.PersonDTO;
+import io.github.gabznavas.Book.API.data.dto.v1.PersonDTO;
 import io.github.gabznavas.Book.API.models.Person;
 
 import java.util.ArrayList;

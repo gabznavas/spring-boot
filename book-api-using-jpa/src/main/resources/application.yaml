@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC para conex�o com o MySQL
-    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC # URL de conex�o com o banco de dados
+    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true # URL de conex�o com o banco de dados
     # - 127.0.0.1: endere�o do banco (localhost)
     # - 3307: porta do MySQL
     # - book-api: nome do banco de dados
@@ -25,6 +25,7 @@ spring:
     # não remover essa prop
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
     show-sql: false # Exibe as queries SQL no console (�til para debug se ativado)
     open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em produ��o
 

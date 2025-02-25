@@ -1,6 +1,6 @@
 package io.github.gabznavas.Book.API.unittests.mapper;
 
-import io.github.gabznavas.Book.API.data.dto.PersonDTO;
+import io.github.gabznavas.Book.API.data.dto.v1.PersonDTO;
 import io.github.gabznavas.Book.API.models.Person;
 import io.github.gabznavas.Book.API.unittests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,7 @@
 package io.github.gabznavas.Book.API.controllers;
 
-import io.github.gabznavas.Book.API.data.dto.PersonDTO;
+import io.github.gabznavas.Book.API.data.dto.v1.PersonDTO;
+import io.github.gabznavas.Book.API.data.dto.v2.PersonDTOV2;
 import io.github.gabznavas.Book.API.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,16 @@ public class PersonController {
     )
     public ResponseEntity<PersonDTO> create(@RequestBody PersonDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(dto));
+    }
+
+
+    @PostMapping(
+            value = "/v2",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<PersonDTOV2> createV2(@RequestBody PersonDTOV2 dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(personService.createV2(dto));
     }
 
     @PutMapping(
