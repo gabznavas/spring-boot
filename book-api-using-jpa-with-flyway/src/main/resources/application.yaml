@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: Book-API # Nome da aplica��o, usado em logs e ferramentas de monitoramento
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC para conex�o com o MySQL
+    url: jdbc:mysql://127.0.0.1:3307/book-api?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true # URL de conex�o com o banco de dados
+    # - 127.0.0.1: endere�o do banco (localhost)
+    # - 3307: porta do MySQL
+    # - book-api: nome do banco de dados
+    # - useSSL=false: desativa SSL para evitar problemas de certificado em dev
+    # - serverTimezone=UTC: define o fuso hor�rio para evitar warnings
+    username: root # Usu�rio do banco de dados
+    password: rootpassword # Senha do banco de dados
+
+  jpa:
+    hibernate:
+      ddl-auto: none # Estrat�gia de cria��o/atualiza��o do schema do banco
+      # - update: atualiza o schema sem apagar dados
+      # - create: cria o schema do zero em cada inicializa��o
+      # - create-drop: cria o schema e apaga ao encerrar a app
+      # - validate: valida o schema existente sem alter�-lo
+      # - none: desativa o gerenciamento de schema
+
+    # não remover essa prop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: false # Exibe as queries SQL no console (�til para debug se ativado)
+    open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em produ��o
+
+# Isso exibirá todos os logs do pacote no nível correto
+logging:
+  level:
+    # aplicação inteira
+    root: WARN
+    # somente na API
+    #    io.github.gabznavas.Book.API: TRACE
+#    io.github.gabznavas.Book.API: DEBUG
+#    io.github.gabznavas.Book.API: DEBUG
+#    io.github.gabznavas.Book.API: WARN
+#    io.github.gabznavas.Book.API: ERROR
