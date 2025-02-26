@@ -19,7 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 // ira criar os objetos por classe
 // se tiver outra classe, vai criar outras instâncias
@@ -248,6 +248,9 @@ class PersonServiceTest {
         when(personRepository.findById(personId)).thenReturn(Optional.of(person));
 
         personService.delete(personId);
+
+        verify(personRepository, times(1)).findById(anyLong());
+        verify(personRepository, times(1)).delete(any(Person.class));
     }
 
     @Test
