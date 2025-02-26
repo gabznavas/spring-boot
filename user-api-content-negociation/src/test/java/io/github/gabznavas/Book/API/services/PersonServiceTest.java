@@ -47,7 +47,6 @@ class PersonServiceTest {
     void findById() {
         final Long personId = 1L;
         Person person = input.mockEntity(1);
-        person.setId(personId);
 
         when(personRepository.findById(1L)).thenReturn(Optional.of(person));
         PersonDTO result = personService.findById(1L);
@@ -109,6 +108,67 @@ class PersonServiceTest {
 
     @Test
     void create() {
+        final Long personId = 1L;
+        Person person = input.mockEntity(personId.intValue());
+
+        when(personRepository.save(person)).thenReturn(person);
+
+        PersonDTO dto = input.mockDTO(personId.intValue());
+        PersonDTO result = personService.create(dto);
+
+        assertNotNull(result);
+        assertNotNull(result.getId());
+        assertNotNull(result.getAddress());
+        assertNotNull(result.getFirstName());
+        assertNotNull(result.getLastName());
+        assertNotNull(result.getGender());
+        assertNotNull(result.getLinks());
+
+        // hateoas
+        // self
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("self")
+                        && link.getHref().endsWith("api/person/v1")
+                        && link.getType().equals("POST")
+        );
+        // update
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("update")
+                        && link.getHref().endsWith("api/person/v1/" + personId)
+                        && link.getType().equals("PUT")
+        );
+        // delete
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("delete")
+                        && link.getHref().endsWith("api/person/v1/" + personId)
+                        && link.getType().equals("DELETE")
+        );
+        // findAll
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("self")
+                        && link.getHref().endsWith("api/person/v1")
+                        && link.getType().equals("GET")
+        );
+        // create
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("findById")
+                        && link.getHref().endsWith("api/person/v1" + personId)
+                        && link.getType().equals("GET")
+        );
+        // length
+        assertEquals(5, result.getLinks().stream().toList().size());
+
+        // assert data person
+        assertEquals(personId, person.getId());
+        assertEquals("First Name Test" + personId, person.getFirstName());
+        assertEquals("Last Name Test" + personId, person.getLastName());
+        assertEquals("Female", person.getGender());
+        assertEquals("Address Test" + personId, person.getAddress());
     }
 
     @Test
