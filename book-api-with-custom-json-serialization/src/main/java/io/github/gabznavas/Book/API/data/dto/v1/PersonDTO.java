@@ -1,11 +1,14 @@
 package io.github.gabznavas.Book.API.data.dto.v1;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.github.gabznavas.Book.API.serializer.GenderSerializer;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 @JsonPropertyOrder({"id", "firstName", "lastName", "gender", "address"})
@@ -22,9 +25,13 @@ public class PersonDTO implements Serializable {
     @JsonProperty("last_name")
     private String lastName;
 
+    @JsonFormat(pattern = "dd/MM/yyyy") // data no padrão brasileiro
+    private Date birthDay;
+
     private String address;
 
-    @JsonIgnore
+    //    @JsonIgnore
+    @JsonSerialize(using = GenderSerializer.class)
     private String gender;
 
     public PersonDTO(Long id, String firstName, String lastName, String address, String gender) {
@@ -84,15 +91,23 @@ public class PersonDTO implements Serializable {
         this.gender = gender;
     }
 
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        PersonDTO person = (PersonDTO) o;
-        return Objects.equals(id, person.id) && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(address, person.address) && Objects.equals(gender, person.gender);
+        PersonDTO personDTO = (PersonDTO) o;
+        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(birthDay, personDTO.birthDay) && Objects.equals(address, personDTO.address) && Objects.equals(gender, personDTO.gender);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, address, gender);
+        return Objects.hash(id, firstName, lastName, birthDay, address, gender);
     }
 }
