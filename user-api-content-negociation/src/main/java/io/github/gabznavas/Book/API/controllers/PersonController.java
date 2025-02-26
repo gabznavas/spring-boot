@@ -22,10 +22,12 @@ public class PersonController {
             produces = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE
             },
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE
             }
     )
     public ResponseEntity<PersonDTO> create(@RequestBody PersonDTO dto) {
@@ -38,10 +40,12 @@ public class PersonController {
             produces = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE
             },
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE
             }
     )
     public ResponseEntity<PersonDTOV2> createV2(@RequestBody PersonDTOV2 dto) {
@@ -53,10 +57,12 @@ public class PersonController {
             produces = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE
             },
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE
             }
     )
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody() PersonDTO dto) {
@@ -75,6 +81,7 @@ public class PersonController {
             produces = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE
             }
     )
     public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
@@ -85,7 +92,8 @@ public class PersonController {
     @GetMapping(
             produces = {
                     MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE
             })
     public ResponseEntity<List<PersonDTO>> findAll() {
         return ResponseEntity.ok(personService.findAll());
