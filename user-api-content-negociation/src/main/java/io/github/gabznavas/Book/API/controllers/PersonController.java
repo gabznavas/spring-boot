@@ -35,7 +35,7 @@ public class PersonController {
     )
     public ResponseEntity<PersonDTO> create(@RequestBody final PersonDTO dto) {
         final PersonDTO dtoCreated = personService.create(dto);
-        addHateoas(dto.getId(), dto);
+        addHateoas(dtoCreated);
         return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreated);
     }
 
@@ -91,9 +91,7 @@ public class PersonController {
     )
     public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
         final PersonDTO dto = personService.findById(id);
-
-        addHateoas(dto.getId(), dto);
-
+        addHateoas(dto);
         return ResponseEntity.ok(dto);
     }
 
@@ -106,17 +104,15 @@ public class PersonController {
             })
     public ResponseEntity<List<PersonDTO>> findAll() {
         final List<PersonDTO> dtos = personService.findAll();
-
-        dtos.forEach(dto -> addHateoas(dto.getId(), dto));
-
+        dtos.forEach(this::addHateoas);
         return ResponseEntity.ok(dtos);
     }
 
-    private void addHateoas(Long id, PersonDTO dto) {
+    private void addHateoas(PersonDTO dto) {
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
-        dto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel().withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
-        dto.add(linkTo(methodOn(PersonController.class).update(id, dto)).withRel("update").withType("PUT"));
-        dto.add(linkTo(methodOn(PersonController.class).delete(id)).withRel("delete").withType("DELETE"));
+        dto.add(linkTo(methodOn(PersonController.class).update(dto.getId(), dto)).withRel("update").withType("PUT"));
+        dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
     }
 }
