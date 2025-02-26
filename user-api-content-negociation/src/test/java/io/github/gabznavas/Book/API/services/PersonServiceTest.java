@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -99,11 +101,11 @@ class PersonServiceTest {
         assertEquals(5, result.getLinks().stream().toList().size());
 
         // assert data person
-        assertEquals(personId, person.getId());
-        assertEquals("First Name Test" + personId, person.getFirstName());
-        assertEquals("Last Name Test" + personId, person.getLastName());
-        assertEquals("Female", person.getGender());
-        assertEquals("Address Test" + personId, person.getAddress());
+        assertEquals(personId, result.getId());
+        assertEquals(person.getFirstName(), result.getFirstName());
+        assertEquals(person.getLastName(), result.getLastName());
+        assertEquals(person.getGender(), result.getGender());
+        assertEquals(person.getAddress(), result.getAddress());
     }
 
     @Test
@@ -164,22 +166,160 @@ class PersonServiceTest {
         assertEquals(5, result.getLinks().stream().toList().size());
 
         // assert data person
-        assertEquals(personId, person.getId());
-        assertEquals("First Name Test" + personId, person.getFirstName());
-        assertEquals("Last Name Test" + personId, person.getLastName());
-        assertEquals("Female", person.getGender());
-        assertEquals("Address Test" + personId, person.getAddress());
+        assertEquals(personId, result.getId());
+        assertEquals(person.getFirstName(), result.getFirstName());
+        assertEquals(person.getLastName(), result.getLastName());
+        assertEquals(person.getGender(), result.getGender());
+        assertEquals(person.getAddress(), result.getAddress());
     }
 
     @Test
     void update() {
+        final Long personId = 1L;
+        final Person person = input.mockEntity(personId.intValue());
+        final PersonDTO dto = input.mockDTO(personId.intValue());
+
+        when(personRepository.findById(personId)).thenReturn(Optional.of(person));
+        when(personRepository.save(person)).thenReturn(person);
+
+        final PersonDTO result = personService.update(personId, dto);
+
+        assertNotNull(result);
+        assertNotNull(result.getId());
+        assertNotNull(result.getAddress());
+        assertNotNull(result.getFirstName());
+        assertNotNull(result.getLastName());
+        assertNotNull(result.getGender());
+        assertNotNull(result.getLinks());
+
+        // hateoas
+        // self
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("create")
+                        && link.getHref().endsWith("api/person/v1")
+                        && link.getType().equals("POST")
+        );
+        // update
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("self")
+                        && link.getHref().endsWith("api/person/v1/" + personId)
+                        && link.getType().equals("PUT")
+        );
+        // delete
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("delete")
+                        && link.getHref().endsWith("api/person/v1/" + personId)
+                        && link.getType().equals("DELETE")
+        );
+        // findAll
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("self")
+                        && link.getHref().endsWith("api/person/v1")
+                        && link.getType().equals("GET")
+        );
+        // create
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel()
+                        .value().equals("findById")
+                        && link.getHref().endsWith("api/person/v1" + personId)
+                        && link.getType().equals("GET")
+        );
+        // length
+        assertEquals(5, result.getLinks().stream().toList().size());
+
+        // assert data person
+        assertEquals(personId, result.getId());
+        assertEquals(person.getFirstName(), result.getFirstName());
+        assertEquals(person.getLastName(), result.getLastName());
+        assertEquals(person.getGender(), result.getGender());
+        assertEquals(person.getAddress(), result.getAddress());
     }
 
     @Test
     void delete() {
+        final Long personId = 1L;
+        final Person person = input.mockEntity(personId.intValue());
+        final PersonDTO dto = input.mockDTO(personId.intValue());
+
+        when(personRepository.findById(personId)).thenReturn(Optional.of(person));
+
+        personService.delete(personId);
     }
 
     @Test
     void findAll() {
+        List<Person> people = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            people.add(input.mockEntity(i + 1));
+        }
+
+        when(personRepository.findAll()).thenReturn(people);
+        List<PersonDTO> peopleResult = personService.findAll();
+
+        assertNotNull(peopleResult);
+
+
+        for (int i = 0; i < 10; i++) {
+            final PersonDTO result = peopleResult.get(i);
+            final Long personId = i + 1L;
+            final Person person = people.get(i);
+
+            assertNotNull(result.getId());
+            assertNotNull(result.getAddress());
+            assertNotNull(result.getFirstName());
+            assertNotNull(result.getLastName());
+            assertNotNull(result.getGender());
+            assertNotNull(result.getLinks());
+
+            // hateoas
+            // self
+            result.getLinks().stream().anyMatch(link ->
+                    link.getRel()
+                            .value().equals("findById")
+                            && link.getHref().endsWith("api/person/v1/" + personId)
+                            && link.getType().equals("GET")
+            );
+            // update
+            result.getLinks().stream().anyMatch(link ->
+                    link.getRel()
+                            .value().equals("update")
+                            && link.getHref().endsWith("api/person/v1/" + personId)
+                            && link.getType().equals("PUT")
+            );
+            // delete
+            result.getLinks().stream().anyMatch(link ->
+                    link.getRel()
+                            .value().equals("delete")
+                            && link.getHref().endsWith("api/person/v1/" + personId)
+                            && link.getType().equals("DELETE")
+            );
+            // findAll
+            result.getLinks().stream().anyMatch(link ->
+                    link.getRel()
+                            .value().equals("self")
+                            && link.getHref().endsWith("api/person/v1")
+                            && link.getType().equals("GET")
+            );
+            // create
+            result.getLinks().stream().anyMatch(link ->
+                    link.getRel()
+                            .value().equals("create")
+                            && link.getHref().endsWith("api/person/v1")
+                            && link.getType().equals("POST")
+            );
+            // length
+            assertEquals(5, result.getLinks().stream().toList().size());
+
+            // assert data person
+            assertEquals(personId, result.getId());
+            assertEquals(person.getFirstName(), result.getFirstName());
+            assertEquals(person.getLastName(), result.getLastName());
+            assertEquals(person.getGender(), result.getGender());
+            assertEquals(person.getAddress(), result.getAddress());
+        }
     }
 }

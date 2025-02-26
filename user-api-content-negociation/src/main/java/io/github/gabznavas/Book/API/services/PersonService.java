@@ -45,19 +45,21 @@ public class PersonService {
         return convertEntityToDTO(personCreated);
     }
 
-    public PersonDTO update(Long id, PersonDTO dto) {
+    public PersonDTO update(Long id, PersonDTO data) {
         logger.info("Updating all People!");
 
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id."));
 
-        person.setFirstName(dto.getFirstName());
-        person.setLastName(dto.getLastName());
-        person.setAddress(dto.getAddress());
-        person.setGender(dto.getGender());
+        person.setFirstName(data.getFirstName());
+        person.setLastName(data.getLastName());
+        person.setAddress(data.getAddress());
+        person.setGender(data.getGender());
 
         Person personUpdated = personRepository.save(person);
-        return parseObject(personUpdated, PersonDTO.class);
+        final PersonDTO dto = parseObject(personUpdated, PersonDTO.class);
+        addHateoas(dto);
+        return dto;
     }
 
     public void delete(Long id) {
