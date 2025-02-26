@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @RestController
 @RequestMapping("/person")
 public class PersonController {
@@ -34,9 +31,7 @@ public class PersonController {
             }
     )
     public ResponseEntity<PersonDTO> create(@RequestBody final PersonDTO dto) {
-        final PersonDTO dtoCreated = personService.create(dto);
-        addHateoas(dtoCreated);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(dto));
     }
 
 
@@ -90,9 +85,7 @@ public class PersonController {
             }
     )
     public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
-        final PersonDTO dto = personService.findById(id);
-        addHateoas(dto);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(personService.findById(id));
     }
 
 
@@ -104,15 +97,7 @@ public class PersonController {
             })
     public ResponseEntity<List<PersonDTO>> findAll() {
         final List<PersonDTO> dtos = personService.findAll();
-        dtos.forEach(this::addHateoas);
         return ResponseEntity.ok(dtos);
     }
 
-    private void addHateoas(PersonDTO dto) {
-        dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
-        dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
-        dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
-        dto.add(linkTo(methodOn(PersonController.class).update(dto.getId(), dto)).withRel("update").withType("PUT"));
-        dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
-    }
 }
