@@ -4,6 +4,7 @@ package io.github.gabznavas.Book.API.services;
 import io.github.gabznavas.Book.API.controllers.PersonController;
 import io.github.gabznavas.Book.API.data.dto.v1.PersonDTO;
 import io.github.gabznavas.Book.API.data.dto.v2.PersonDTOV2;
+import io.github.gabznavas.Book.API.exceptions.RequiredObjectIsNullException;
 import io.github.gabznavas.Book.API.exceptions.ResourceNotFoundException;
 import io.github.gabznavas.Book.API.models.Person;
 import io.github.gabznavas.Book.API.repositories.PersonRepository;
@@ -30,6 +31,9 @@ public class PersonService {
     private final Logger logger = LoggerFactory.getLogger(PersonService.class.getName());
 
     public PersonDTO create(PersonDTO person) {
+        if (person == null) {
+            throw new RequiredObjectIsNullException();
+        }
         logger.info("Create one Person!");
         Person newPerson = parseObject(person, Person.class);
         Person personCreated = personRepository.save(newPerson);
@@ -46,6 +50,10 @@ public class PersonService {
     }
 
     public PersonDTO update(Long id, PersonDTO data) {
+        if (id == null || data == null) {
+            throw new RequiredObjectIsNullException();
+        }
+
         logger.info("Updating all People!");
 
         Person person = personRepository.findById(id)

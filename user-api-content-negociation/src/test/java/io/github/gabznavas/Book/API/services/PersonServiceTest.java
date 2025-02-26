@@ -1,6 +1,7 @@
 package io.github.gabznavas.Book.API.services;
 
 import io.github.gabznavas.Book.API.data.dto.v1.PersonDTO;
+import io.github.gabznavas.Book.API.exceptions.RequiredObjectIsNullException;
 import io.github.gabznavas.Book.API.models.Person;
 import io.github.gabznavas.Book.API.repositories.PersonRepository;
 import io.github.gabznavas.Book.API.unittests.mapper.mocks.MockPerson;
@@ -17,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 // ira criar os objetos por classe
@@ -174,6 +174,16 @@ class PersonServiceTest {
     }
 
     @Test
+    void testCreateWithNullPerson() {
+        Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+            personService.create(null);
+        });
+        String expectedMessage = "It is not allowed to persist a null object";
+        String actualMessage = exception.getMessage();
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
     void update() {
         final Long personId = 1L;
         final Person person = input.mockEntity(personId.intValue());
@@ -240,6 +250,25 @@ class PersonServiceTest {
     }
 
     @Test
+    void testUpdateCreateWithNullPerson() {
+        // id null
+        Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+            personService.update(null, input.mockDTO());
+        });
+        String expectedMessage = "It is not allowed to persist a null object";
+        String actualMessage = exception.getMessage();
+        assertEquals(expectedMessage, actualMessage);
+
+        // personDto null
+        exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+            personService.update(1L, null);
+        });
+        expectedMessage = "It is not allowed to persist a null object";
+        actualMessage = exception.getMessage();
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
     void delete() {
         final Long personId = 1L;
         final Person person = input.mockEntity(personId.intValue());
@@ -251,6 +280,7 @@ class PersonServiceTest {
 
         verify(personRepository, times(1)).findById(anyLong());
         verify(personRepository, times(1)).delete(any(Person.class));
+        verifyNoMoreInteractions(personRepository);
     }
 
     @Test
