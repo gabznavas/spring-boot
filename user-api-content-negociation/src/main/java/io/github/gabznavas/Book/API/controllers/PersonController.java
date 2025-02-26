@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/person")
 public class PersonController {
@@ -30,8 +33,16 @@ public class PersonController {
                     MediaType.APPLICATION_YAML_VALUE
             }
     )
-    public ResponseEntity<PersonDTO> create(@RequestBody PersonDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(dto));
+    public ResponseEntity<PersonDTO> create(@RequestBody final PersonDTO dto) {
+        final PersonDTO dtoCreated = personService.create(dto);
+
+        dtoCreated.add(linkTo(methodOn(PersonController.class).create(dtoCreated)).withSelfRel().withType("POST"));
+        dtoCreated.add(linkTo(methodOn(PersonController.class).findById(dtoCreated.getId())).withRel("findById").withType("GET"));
+        dtoCreated.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+        dtoCreated.add(linkTo(methodOn(PersonController.class).update(dtoCreated.getId(), dtoCreated)).withRel("update").withType("PUT"));
+        dtoCreated.add(linkTo(methodOn(PersonController.class).delete(dtoCreated.getId())).withRel("delete").withType("DELETE"));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreated);
     }
 
 
@@ -85,7 +96,15 @@ public class PersonController {
             }
     )
     public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(personService.findById(id));
+        final PersonDTO dto = personService.findById(id);
+
+        dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
+        dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).update(dto.getId(), dto)).withRel("update").withType("PUT"));
+        dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
+
+        return ResponseEntity.ok(dto);
     }
 
 
@@ -96,6 +115,16 @@ public class PersonController {
                     MediaType.APPLICATION_YAML_VALUE
             })
     public ResponseEntity<List<PersonDTO>> findAll() {
-        return ResponseEntity.ok(personService.findAll());
+        final List<PersonDTO> dtos = personService.findAll();
+
+        dtos.forEach(dto -> {
+            dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
+            dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
+            dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+            dto.add(linkTo(methodOn(PersonController.class).update(dto.getId(), dto)).withRel("update").withType("PUT"));
+            dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
+        });
+        
+        return ResponseEntity.ok(dtos);
     }
 }
