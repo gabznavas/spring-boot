@@ -19,8 +19,14 @@ public class PersonController {
     private PersonService personService;
 
     @PostMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+            },
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+            }
     )
     public ResponseEntity<PersonDTO> create(@RequestBody PersonDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.create(dto));
@@ -29,8 +35,14 @@ public class PersonController {
 
     @PostMapping(
             value = "/v2",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+            },
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+            }
     )
     public ResponseEntity<PersonDTOV2> createV2(@RequestBody PersonDTOV2 dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.createV2(dto));
@@ -38,8 +50,14 @@ public class PersonController {
 
     @PutMapping(
             value = "/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+            },
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+            }
     )
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody() PersonDTO dto) {
         personService.update(id, dto);
@@ -54,14 +72,21 @@ public class PersonController {
 
     @GetMapping(
             value = "/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+            }
     )
     public ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(personService.findById(id));
     }
 
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE
+            })
     public ResponseEntity<List<PersonDTO>> findAll() {
         return ResponseEntity.ok(personService.findAll());
     }
