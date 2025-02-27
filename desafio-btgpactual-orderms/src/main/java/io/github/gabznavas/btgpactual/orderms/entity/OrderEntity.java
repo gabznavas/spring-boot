@@ -16,7 +16,7 @@ public class OrderEntity {
     private Long orderId;
 
     @Indexed(name = "customer_id_index")
-    private Long custumerId;
+    private Long customerId;
 
     @Field(targetType = FieldType.DECIMAL128)
     private BigDecimal total;
@@ -34,12 +34,12 @@ public class OrderEntity {
         this.orderId = orderId;
     }
 
-    public Long getCustumerId() {
-        return custumerId;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustumerId(Long custumerId) {
-        this.custumerId = custumerId;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public BigDecimal getTotal() {
