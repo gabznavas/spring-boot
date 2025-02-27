@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -285,20 +284,16 @@ class PersonServiceTest {
 
     @Test
     void findAll() {
-        List<Person> people = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            people.add(input.mockEntity(i + 1));
-        }
+        List<Person> people = input.mockEntityList();
 
         when(personRepository.findAll()).thenReturn(people);
         List<PersonDTO> peopleResult = personService.findAll();
 
         assertNotNull(peopleResult);
+        assertEquals(people.size(), peopleResult.size());
 
-
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < people.size(); i++) {
             final PersonDTO result = peopleResult.get(i);
-            final Long personId = i + 1L;
             final Person person = people.get(i);
 
             assertNotNull(result.getId());
@@ -313,21 +308,21 @@ class PersonServiceTest {
             result.getLinks().stream().anyMatch(link ->
                     link.getRel()
                             .value().equals("findById")
-                            && link.getHref().endsWith("api/person/v1/" + personId)
+                            && link.getHref().endsWith("api/person/v1/" + person.getId())
                             && link.getType().equals("GET")
             );
             // update
             result.getLinks().stream().anyMatch(link ->
                     link.getRel()
                             .value().equals("update")
-                            && link.getHref().endsWith("api/person/v1/" + personId)
+                            && link.getHref().endsWith("api/person/v1/" + person.getId())
                             && link.getType().equals("PUT")
             );
             // delete
             result.getLinks().stream().anyMatch(link ->
                     link.getRel()
                             .value().equals("delete")
-                            && link.getHref().endsWith("api/person/v1/" + personId)
+                            && link.getHref().endsWith("api/person/v1/" + person.getId())
                             && link.getType().equals("DELETE")
             );
             // findAll
@@ -348,7 +343,7 @@ class PersonServiceTest {
             assertEquals(5, result.getLinks().stream().toList().size());
 
             // assert data person
-            assertEquals(personId, result.getId());
+            assertEquals(person.getId(), result.getId());
             assertEquals(person.getFirstName(), result.getFirstName());
             assertEquals(person.getLastName(), result.getLastName());
             assertEquals(person.getGender(), result.getGender());
