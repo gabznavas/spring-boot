@@ -2,7 +2,7 @@ package io.github.gabznavas.picpay.service;
 
 import io.github.gabznavas.picpay.controller.dto.CreateWalletDto;
 import io.github.gabznavas.picpay.entity.Wallet;
-import io.github.gabznavas.picpay.execption.WalletDataAlreadyExistsException;
+import io.github.gabznavas.picpay.exception.WalletDataAlreadyExistsException;
 import io.github.gabznavas.picpay.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package io.github.gabznavas.picpay.controller;
 
-import io.github.gabznavas.picpay.execption.PicPayException;
+import io.github.gabznavas.picpay.exception.PicPayException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
