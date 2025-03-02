@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 @RestController
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
 
     @GetMapping("/customers/{customerId}/orders")
     public ResponseEntity<ApiResponse<OrderResponse>> listOrders(
@@ -26,10 +30,15 @@ public class OrderController {
             @RequestParam(name = "size", defaultValue = "10") Integer pageSize
     ) {
         Page<OrderResponse> pageResponse = orderService.findAllByCustomerId(customerId, PageRequest.of(page, pageSize));
+
+        BigDecimal totalOnOrders = orderService.findTotalOnOrdersByCustomerId(customerId);
+
         return ResponseEntity.ok(new ApiResponse<>(
+                Map.of("totalOnOrders", totalOnOrders),
                 pageResponse.getContent(),
                 PaginationResponse.fromPage(pageResponse)
         ));
     }
+
 
 }
