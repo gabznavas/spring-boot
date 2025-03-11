@@ -13,7 +13,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "author", length = 200)
+    @Column(name = "author", length = 200, nullable = false)
     private String author;
 
     @Column(name = "launch_date", nullable = false)
@@ -22,7 +22,7 @@ public class Book {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "title", length = 200)
+    @Column(name = "title", length = 200, nullable = false)
     private String title;
 
     public Long getId() {
