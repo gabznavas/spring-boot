@@ -81,6 +81,7 @@ public class PersonService {
 
 
     public PersonDTO findById(Long id) {
+        logger.info("Finding People by ID!");
         Person personFound = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id."));
         final PersonDTO dto = parseObject(personFound, PersonDTO.class);
@@ -89,6 +90,7 @@ public class PersonService {
     }
 
     public List<PersonDTO> findAll() {
+        logger.info("Finding All Persons!");
         List<Person> people = personRepository.findAll().stream().toList();
         final List<PersonDTO> dtos = parseListObjects(people, PersonDTO.class);
         dtos.forEach(this::addHateoas);

@@ -13,16 +13,18 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "author", length = 200, nullable = false)
+    @Column(name = "author", length = 180, nullable = false)
     private String author;
 
     @Column(name = "launch_date", nullable = false)
+    @Temporal(TemporalType.DATE)
     private LocalDate launch;
 
     @Column(name = "price", nullable = false)
+    // TODO: alterar para BigDecimal
     private Double price;
 
-    @Column(name = "title", length = 200, nullable = false)
+    @Column(name = "title", length = 250, nullable = false)
     private String title;
 
     public Long getId() {
