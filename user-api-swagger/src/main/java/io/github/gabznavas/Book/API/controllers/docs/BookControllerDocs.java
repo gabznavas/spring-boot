@@ -1,5 +1,6 @@
 package io.github.gabznavas.Book.API.controllers.docs;
 
+import io.github.gabznavas.Book.API.data.dto.v1.BookDTO;
 import io.github.gabznavas.Book.API.data.dto.v1.PersonDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -13,18 +14,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-public interface PersonControllerDocs {
+public interface BookControllerDocs {
     @Operation(
-            summary = "Create a person",
-            description = "Create a person",
-            tags = {"People"},
+            summary = "Create a book",
+            description = "Create a book",
+            tags = {"Books"},
             responses = {
                     @ApiResponse(
                             description = "Created",
                             responseCode = "201",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = PersonDTO.class)
+                                    schema = @Schema(implementation = BookDTO.class)
                             )
                     ),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -33,47 +34,12 @@ public interface PersonControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
             }
     )
-    ResponseEntity<PersonDTO> create(@RequestBody PersonDTO dto);
+    ResponseEntity<BookDTO> create(@RequestBody BookDTO dto);
 
     @Operation(
-            summary = "Update a person",
-            description = "Update a specific person by ID",
-            tags = {"People"},
-            responses = {
-                    @ApiResponse(
-                            description = "No Content",
-                            responseCode = "204"
-                    ),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
-            }
-    )
-    ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody() PersonDTO dto);
-
-    @Operation(
-            summary = "Delete a person",
-            description = "Delete a specific person by ID",
-            tags = {"People"},
-            responses = {
-                    @ApiResponse(
-                            description = "No Content",
-                            responseCode = "204"
-                    ),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
-            }
-    )
-    ResponseEntity<?> delete(@PathVariable("id") Long id);
-
-
-    @Operation(
-            summary = "Find a person",
-            description = "Find specific person by your ID",
-            tags = {"People"},
+            summary = "Find a book",
+            description = "Find specific book by your ID",
+            tags = {"Books"},
             responses = {
                     @ApiResponse(
                             description = "Ok",
@@ -90,13 +56,12 @@ public interface PersonControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
             }
     )
-    ResponseEntity<PersonDTO> findById(@PathVariable("id") Long id);
-
+    ResponseEntity<BookDTO> findById(@PathVariable("id") Long id);
 
     @Operation(
-            summary = "Find All People",
-            description = "Find All People",
-            tags = {"People"},
+            summary = "Find all Books",
+            description = "Find all Books",
+            tags = {"Books"},
             responses = {
                     @ApiResponse(
                             description = "Ok",
@@ -115,5 +80,39 @@ public interface PersonControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
             }
     )
-    ResponseEntity<List<PersonDTO>> findAll();
+    ResponseEntity<List<BookDTO>> findAll();
+
+    @Operation(
+            summary = "Update a book",
+            description = "Update a specific book by ID",
+            tags = {"Books"},
+            responses = {
+                    @ApiResponse(
+                            description = "No Content",
+                            responseCode = "204"
+                    ),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
+            }
+    )
+    ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody BookDTO dto);
+
+    @Operation(
+            summary = "Delete a book",
+            description = "Delete a specific book by ID",
+            tags = {"Books"},
+            responses = {
+                    @ApiResponse(
+                            description = "No Content",
+                            responseCode = "204"
+                    ),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
+            }
+    )
+    ResponseEntity<?> delete(@PathVariable("id") Long id);
 }

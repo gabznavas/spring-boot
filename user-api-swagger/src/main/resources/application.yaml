@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Book-API # Nome da aplica��o, usado em logs e ferramentas de monitoramento
+    name: Book-API # Nome da aplicao, usado em logs e ferramentas de monitoramento
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # Driver JDBC para conex�o com o MySQL
@@ -10,12 +10,12 @@ spring:
     # - book-api: nome do banco de dados
     # - useSSL=false: desativa SSL para evitar problemas de certificado em dev
     # - serverTimezone=UTC: define o fuso hor�rio para evitar warnings
-    username: root # Usu�rio do banco de dados
+    username: root # Usuario do banco de dados
     password: rootpassword # Senha do banco de dados
 
   jpa:
     hibernate:
-      ddl-auto: none # Estrat�gia de cria��o/atualiza��o do schema do banco
+      ddl-auto: none # Estrategia de criacao/atualizacao do schema do banco
       # - update: atualiza o schema sem apagar dados
       # - create: cria o schema do zero em cada inicializa��o
       # - create-drop: cria o schema e apaga ao encerrar a app
@@ -26,8 +26,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-    show-sql: false # Exibe as queries SQL no console (�til para debug se ativado)
-    open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em produ��o
+    show-sql: false # Exibe as queries SQL no console (util para debug se ativado)
+    open-in-view: false # Desativa o Open Session in View para evitar problemas de Lazy Loading em producao
 
 # Isso exibirá todos os logs do pacote no nível correto
 logging:
