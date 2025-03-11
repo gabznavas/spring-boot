@@ -64,7 +64,7 @@ class PersonServiceTest {
         // self
         result.getLinks().stream().anyMatch(link ->
                 link.getRel()
-                        .value().equals("self")
+                        .value().equals("findById")
                         && link.getHref().endsWith("api/person/v1/" + personId)
                         && link.getType().equals("GET")
         );
@@ -85,7 +85,7 @@ class PersonServiceTest {
         // findAll
         result.getLinks().stream().anyMatch(link ->
                 link.getRel()
-                        .value().equals("self")
+                        .value().equals("findAll")
                         && link.getHref().endsWith("api/person/v1")
                         && link.getType().equals("GET")
         );

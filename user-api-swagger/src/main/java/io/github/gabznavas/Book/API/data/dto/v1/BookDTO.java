@@ -3,7 +3,7 @@ package io.github.gabznavas.Book.API.data.dto.v1;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class BookDTO extends RepresentationModel<BookDTO> implements Serializable {
@@ -12,7 +12,7 @@ public class BookDTO extends RepresentationModel<BookDTO> implements Serializabl
     private Long id;
 
     private String author;
-    private Date launch;
+    private LocalDate launch;
     private Double price;
     private String title;
 
@@ -32,11 +32,11 @@ public class BookDTO extends RepresentationModel<BookDTO> implements Serializabl
         this.author = author;
     }
 
-    public Date getLaunch() {
+    public LocalDate getLaunch() {
         return launch;
     }
 
-    public void setLaunch(Date launch) {
+    public void setLaunch(LocalDate launch) {
         this.launch = launch;
     }
 
@@ -59,12 +59,13 @@ public class BookDTO extends RepresentationModel<BookDTO> implements Serializabl
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         BookDTO bookDTO = (BookDTO) o;
         return Objects.equals(id, bookDTO.id) && Objects.equals(author, bookDTO.author) && Objects.equals(launch, bookDTO.launch) && Objects.equals(price, bookDTO.price) && Objects.equals(title, bookDTO.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, launch, price, title);
+        return Objects.hash(super.hashCode(), id, author, launch, price, title);
     }
 }

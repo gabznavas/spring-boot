@@ -2,7 +2,7 @@ package io.github.gabznavas.Book.API.models;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -17,7 +17,7 @@ public class Book {
     private String author;
 
     @Column(name = "launch_date", nullable = false)
-    private Date launch;
+    private LocalDate launch;
 
     @Column(name = "price", nullable = false)
     private Double price;
@@ -41,11 +41,11 @@ public class Book {
         this.author = author;
     }
 
-    public Date getLaunch() {
+    public LocalDate getLaunch() {
         return launch;
     }
 
-    public void setLaunch(Date launch) {
+    public void setLaunch(LocalDate launch) {
         this.launch = launch;
     }
 
