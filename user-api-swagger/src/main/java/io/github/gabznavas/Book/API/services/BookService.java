@@ -50,7 +50,7 @@ public class BookService {
     public void delete(Long id) {
         final Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
-        bookRepository.deleteById(id);
+        bookRepository.delete(book);
     }
 
     public BookDTO findById(Long id) {

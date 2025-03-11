@@ -61,7 +61,7 @@ class PersonServiceTest {
         assertNotNull(result.getLinks());
 
         // hateoas
-        // self
+        // findById
         result.getLinks().stream().anyMatch(link ->
                 link.getRel()
                         .value().equals("findById")
@@ -126,10 +126,10 @@ class PersonServiceTest {
         assertNotNull(result.getLinks());
 
         // hateoas
-        // self
+        // findById
         result.getLinks().stream().anyMatch(link ->
                 link.getRel()
-                        .value().equals("self")
+                        .value().equals("findById")
                         && link.getHref().endsWith("api/person/v1")
                         && link.getType().equals("POST")
         );
@@ -202,7 +202,7 @@ class PersonServiceTest {
         assertNotNull(result.getLinks());
 
         // hateoas
-        // self
+        // create
         result.getLinks().stream().anyMatch(link ->
                 link.getRel()
                         .value().equals("create")
@@ -212,7 +212,7 @@ class PersonServiceTest {
         // update
         result.getLinks().stream().anyMatch(link ->
                 link.getRel()
-                        .value().equals("self")
+                        .value().equals("update")
                         && link.getHref().endsWith("api/person/v1/" + personId)
                         && link.getType().equals("PUT")
         );
@@ -304,7 +304,7 @@ class PersonServiceTest {
             assertNotNull(result.getLinks());
 
             // hateoas
-            // self
+            // findById
             result.getLinks().stream().anyMatch(link ->
                     link.getRel()
                             .value().equals("findById")
@@ -328,7 +328,7 @@ class PersonServiceTest {
             // findAll
             result.getLinks().stream().anyMatch(link ->
                     link.getRel()
-                            .value().equals("self")
+                            .value().equals("findAll")
                             && link.getHref().endsWith("api/person/v1")
                             && link.getType().equals("GET")
             );
