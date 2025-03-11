@@ -40,3 +40,8 @@ logging:
 #    io.github.gabznavas.Book.API: DEBUG
 #    io.github.gabznavas.Book.API: WARN
 #    io.github.gabznavas.Book.API: ERROR
+
+spring-doc:
+  paths-to-match: /api/**/v1/**
+  swagger-ui:
+    use-root-path: true
