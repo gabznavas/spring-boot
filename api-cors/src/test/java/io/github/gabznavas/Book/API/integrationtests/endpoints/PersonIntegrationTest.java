@@ -89,10 +89,10 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
     @Order(2)
     void shouldFindPersonById() throws JsonProcessingException {
         String content = given(specification)
-                .basePath("/api/v1/person/" + personDto.getId())
+                .pathParam("id", personDto.getId())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
-                .get()
+                .get("{id}")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
@@ -116,7 +116,6 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
         assertEquals(personDto.getGender(), result.getGender());
         assertEquals(personDto.getAddress(), result.getAddress());
     }
-
 
     @Test
     @Order(3)
@@ -160,13 +159,13 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
     @Order(4)
     void shouldUpdatePersonById() {
         given(specification)
-                .basePath("/api/v1/person/" + personDto.getId())
+                .pathParam("id", personDto.getId())
                 .filter(new RequestLoggingFilter(LogDetail.ALL))
                 .filter(new ResponseLoggingFilter(LogDetail.ALL))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(this.personDto)
                 .when()
-                .put()
+                .put("{id}")
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
@@ -175,10 +174,141 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
     @Order(5)
     void shouldDeletePersonById() {
         given(specification)
-                .basePath("/api/v1/person/" + personDto.getId())
+                .pathParam("id", personDto.getId())
                 .when()
-                .delete()
+                .delete("{id}")
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @Order(6)
+    void shouldCreateAPersonWithWrongCors() {
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB_TWITTER)
+                .setBasePath("/api/v1/person")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        PersonDTO body = input.mockDTO();
+
+        String content = given(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(body)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .extract()
+                .body()
+                .asString();
+
+        assertEquals("Invalid CORS request", content);
+    }
+
+
+    @Test
+    @Order(7)
+    void shouldFindPersonByIdWithWrongCors() {
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB_TWITTER)
+                .setBasePath("/api/v1/person")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        String content = given(specification)
+                .pathParam("id", personDto.getId())
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("{id}")
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .extract()
+                .body()
+                .asString();
+
+        assertEquals("Invalid CORS request", content);
+    }
+
+
+    @Test
+    @Order(8)
+    void shouldFindAllPersonWithWrongPerson() throws JsonProcessingException {
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB_TWITTER)
+                .setBasePath("/api/v1/person")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        String content = given(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .extract()
+                .body()
+                .asString();
+
+        assertEquals("Invalid CORS request", content);
+    }
+
+    @Test
+    @Order(9)
+    void shouldUpdatePersonByIdWithWrongCors() {
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB_TWITTER)
+                .setBasePath("/api/v1/person")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        String content = given(specification)
+                .pathParam("id", personDto.getId())
+                .filter(new RequestLoggingFilter(LogDetail.ALL))
+                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(personDto)
+                .when()
+                .put("{id}")
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .extract()
+                .body()
+                .asString();
+
+
+        assertEquals("Invalid CORS request", content);
+    }
+
+    @Test
+    @Order(10)
+    void shouldDeletePersonByIdWithWronJson() {
+        RequestSpecification specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB_TWITTER)
+                .setBasePath("/api/v1/person")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        String content = given(specification)
+                .pathParam("id", personDto.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .extract()
+                .body()
+                .asString();
+        assertEquals("Invalid CORS request", content);
     }
 }
