@@ -144,4 +144,36 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
         assertEquals(bookDto.getLaunch(), results[index].getLaunch());
         assertEquals(bookDto.getAuthor(), results[index].getAuthor());
     }
+
+    @Test
+    @Order(4)
+    void shouldUpdateBookById() throws JsonProcessingException {
+        given()
+                .basePath("/api/v1/book/" + bookDto.getId())
+                .port(TestConfigs.SERVER_PORT)
+                .filter(new RequestLoggingFilter(LogDetail.ALL))
+                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(bookDto)
+                .when()
+                .put()
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+
+    @Test
+    @Order(5)
+    void shouldDeleteBookById() throws JsonProcessingException {
+        given()
+                .basePath("/api/v1/book/" + bookDto.getId())
+                .port(TestConfigs.SERVER_PORT)
+                .filter(new RequestLoggingFilter(LogDetail.ALL))
+                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+                .body(bookDto)
+                .when()
+                .delete()
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
 }
