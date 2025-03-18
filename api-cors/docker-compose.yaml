@@ -1,0 +1,12 @@
+services:
+  mysql-dev:
+    image: mysql:8.0
+    container_name: mysql-book-api-jpa
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: book-api
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+    ports:
+      - "3307:3306"
