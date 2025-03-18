@@ -19,8 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -78,6 +77,7 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
         assertNotNull(result.getAuthor());
 
         // assert data
+        assertTrue(result.getId() > 0);
         assertEquals(body.getTitle(), result.getTitle());
         assertEquals(body.getLaunch(), result.getLaunch());
         assertEquals(body.getAuthor(), result.getAuthor());
@@ -140,6 +140,7 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
         assertNotNull(results[0].getAuthor());
 
         // assert data
+        assertTrue(results[index].getId() > 0);
         assertEquals(bookDto.getTitle(), results[index].getTitle());
         assertEquals(bookDto.getLaunch(), results[index].getLaunch());
         assertEquals(bookDto.getAuthor(), results[index].getAuthor());

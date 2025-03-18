@@ -18,8 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -78,6 +77,7 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
         assertNotNull(result.getAddress());
 
         // assert data
+        assertTrue(result.getId() > 0);
         assertEquals(body.getFirstName(), result.getFirstName());
         assertEquals(body.getLastName(), result.getLastName());
         assertEquals(body.getGender(), result.getGender());
@@ -110,6 +110,7 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
         assertNotNull(result.getAddress());
 
         // assert data
+        assertTrue(result.getId() > 0);
         assertEquals(personDto.getFirstName(), result.getFirstName());
         assertEquals(personDto.getLastName(), result.getLastName());
         assertEquals(personDto.getGender(), result.getGender());
@@ -148,6 +149,7 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
         assertNotNull(results[index].getAddress());
 
         // assert data
+        assertTrue(results[index].getId() > 0);
         assertEquals(personDto.getFirstName(), results[index].getFirstName());
         assertEquals(personDto.getLastName(), results[index].getLastName());
         assertEquals(personDto.getGender(), results[index].getGender());
