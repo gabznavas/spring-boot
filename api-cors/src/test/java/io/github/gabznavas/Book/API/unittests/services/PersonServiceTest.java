@@ -2,9 +2,9 @@ package io.github.gabznavas.Book.API.unittests.services;
 
 import io.github.gabznavas.Book.API.data.dto.v1.PersonDTO;
 import io.github.gabznavas.Book.API.exceptions.RequiredObjectIsNullException;
-import io.github.gabznavas.Book.API.mapper.mocks.MockPerson;
 import io.github.gabznavas.Book.API.models.Person;
 import io.github.gabznavas.Book.API.repositories.PersonRepository;
+import io.github.gabznavas.Book.API.unittests.services.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

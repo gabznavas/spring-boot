@@ -1,5 +1,8 @@
 server:
   port: 8888
+cors:
+  originPatterns: http://localhost:8080,http://localhost:4200,https://github.com/gabznavas
+  allowedMethods: POST,GET,PUT,DELETE,OPTIONS
 spring:
   application:
     name: Book-API # Nome da aplicao, usado em logs e ferramentas de monitoramento

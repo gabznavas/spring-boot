@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.gabznavas.Book.API.config.TestConfigs;
-import io.github.gabznavas.Book.API.data.dto.v1.PersonDTO;
+import io.github.gabznavas.Book.API.integrationtests.dto.PersonDTO;
+import io.github.gabznavas.Book.API.integrationtests.mapper.mocks.MockPerson;
 import io.github.gabznavas.Book.API.integrationtests.testcontainers.AbstractIntegrationTest;
-import io.github.gabznavas.Book.API.mapper.mocks.MockPerson;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PersonIntegrationTest extends AbstractIntegrationTest {
+    private static RequestSpecification specification;
 
     private static MockPerson input;
 
@@ -29,8 +32,17 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
 
     private static PersonDTO personDto;
 
+
     @BeforeAll
     public static void setup() {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB_GABZNAVAS)
+                .setBasePath("/api/v1/person")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
         objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
@@ -42,11 +54,7 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
     void shouldCreateAPerson() throws JsonProcessingException {
         PersonDTO body = input.mockDTO();
 
-        String content = given()
-                .basePath("/api/person/v1")
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+        String content = given(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
@@ -80,11 +88,8 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
     @Test
     @Order(2)
     void shouldFindPersonById() throws JsonProcessingException {
-        String content = given()
-                .basePath("/api/person/v1/" + this.personDto.getId())
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+        String content = given(specification)
+                .basePath("/api/v1/person/" + personDto.getId())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get()
@@ -117,11 +122,7 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
     void shouldFindAllPerson() throws JsonProcessingException {
         final int lengthOfPeople = 7;
 
-        String content = given()
-                .basePath("/api/person/v1")
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+        String content = given(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get()
@@ -156,9 +157,8 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
     @Test
     @Order(4)
     void shouldUpdatePersonById() {
-        given()
-                .basePath("/api/person/v1/" + personDto.getId())
-                .port(TestConfigs.SERVER_PORT)
+        given(specification)
+                .basePath("/api/v1/person/" + personDto.getId())
                 .filter(new RequestLoggingFilter(LogDetail.ALL))
                 .filter(new ResponseLoggingFilter(LogDetail.ALL))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -172,11 +172,8 @@ public class PersonIntegrationTest extends AbstractIntegrationTest {
     @Test
     @Order(5)
     void shouldDeletePersonById() {
-        given()
-                .basePath("/api/person/v1/" + personDto.getId())
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+        given(specification)
+                .basePath("/api/v1/person/" + personDto.getId())
                 .when()
                 .delete()
                 .then()

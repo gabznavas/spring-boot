@@ -21,7 +21,7 @@ public class PersonController implements PersonControllerDocs {
     @Autowired
     private PersonService personService;
 
-    @CrossOrigin(origins = {"http://localhost:8080", "https://github.com/gabznavas"})
+    //    @CrossOrigin(origins = {"http://localhost:8080", "https://github.com/gabznavas"})
     @PostMapping(
             produces = {
                     MediaType.APPLICATION_JSON_VALUE,
@@ -65,7 +65,7 @@ public class PersonController implements PersonControllerDocs {
         return ResponseEntity.noContent().build();
     }
 
-    @CrossOrigin(origins = {"http://localhost:8080", "https://github.com/gabznavas"})
+    //    @CrossOrigin(origins = {"http://localhost:8080", "https://github.com/gabznavas"})
     @GetMapping(
             value = "/{id}",
             produces = {

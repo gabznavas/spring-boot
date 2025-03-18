@@ -5,12 +5,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.gabznavas.Book.API.config.TestConfigs;
-import io.github.gabznavas.Book.API.data.dto.v1.BookDTO;
+import io.github.gabznavas.Book.API.integrationtests.dto.BookDTO;
+import io.github.gabznavas.Book.API.integrationtests.mapper.mocks.MockBook;
 import io.github.gabznavas.Book.API.integrationtests.testcontainers.AbstractIntegrationTest;
-import io.github.gabznavas.Book.API.mapper.mocks.MockBook;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BookIntegrationTest extends AbstractIntegrationTest {
 
+    private static RequestSpecification specification;
     private static MockBook input;
 
     private static ObjectMapper objectMapper;
@@ -32,6 +35,14 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
 
     @BeforeAll
     public static void setup() {
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB_GABZNAVAS)
+                .setBasePath("/api/v1/book")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
         objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.registerModule(new JavaTimeModule());
@@ -44,11 +55,7 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
     void shouldCreateABook() throws JsonProcessingException {
         BookDTO body = input.mockDTO();
 
-        String content = given()
-                .basePath("/api/v1/book")
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+        String content = given(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .body(body)
@@ -79,11 +86,8 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
     @Test
     @Order(2)
     void shouldFindBookById() throws JsonProcessingException {
-        String content = given()
+        String content = given(specification)
                 .basePath("/api/v1/book/" + bookDto.getId())
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get()
@@ -111,11 +115,7 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
     @Test
     @Order(3)
     void shouldFindAllBooks() throws JsonProcessingException {
-        String content = given()
-                .basePath("/api/v1/book")
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
+        String content = given(specification)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get()
@@ -148,11 +148,8 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
     @Test
     @Order(4)
     void shouldUpdateBookById() throws JsonProcessingException {
-        given()
+        given(specification)
                 .basePath("/api/v1/book/" + bookDto.getId())
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(bookDto)
                 .when()
@@ -165,11 +162,8 @@ public class BookIntegrationTest extends AbstractIntegrationTest {
     @Test
     @Order(5)
     void shouldDeleteBookById() throws JsonProcessingException {
-        given()
+        given(specification)
                 .basePath("/api/v1/book/" + bookDto.getId())
-                .port(TestConfigs.SERVER_PORT)
-                .filter(new RequestLoggingFilter(LogDetail.ALL))
-                .filter(new ResponseLoggingFilter(LogDetail.ALL))
                 .body(bookDto)
                 .when()
                 .delete()

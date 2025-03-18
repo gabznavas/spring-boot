@@ -1,4 +1,4 @@
-package io.github.gabznavas.Book.API.mapper.mocks;
+package io.github.gabznavas.Book.API.unittests.services.mapper.mocks;
 
 import io.github.gabznavas.Book.API.data.dto.v1.BookDTO;
 import io.github.gabznavas.Book.API.models.Book;
@@ -21,7 +21,7 @@ public class MockBook {
     public List<Book> mockEntityList() {
         List<Book> books = new ArrayList<>();
         for (int i = 0; i < 14; i++) {
-            books.add(mockEntity(i));
+            books.add(mockEntity(i + 1));
         }
         return books;
     }
@@ -29,7 +29,7 @@ public class MockBook {
     public List<BookDTO> mockDTOList() {
         List<BookDTO> books = new ArrayList<>();
         for (int i = 0; i < 14; i++) {
-            books.add(mockDTO(i));
+            books.add(mockDTO(i + 1));
         }
         return books;
     }

@@ -1,9 +1,9 @@
 package io.github.gabznavas.Book.API.unittests.services;
 
 import io.github.gabznavas.Book.API.data.dto.v1.BookDTO;
-import io.github.gabznavas.Book.API.mapper.mocks.MockBook;
 import io.github.gabznavas.Book.API.models.Book;
 import io.github.gabznavas.Book.API.repositories.BookRepository;
+import io.github.gabznavas.Book.API.unittests.services.mapper.mocks.MockBook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,8 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -54,6 +53,7 @@ public class BookServiceTest {
 
         BookDTO result = bookService.findById(bookId);
 
+        // not nulls
         assertNotNull(result);
         assertNotNull(result.getId());
         assertNotNull(result.getAuthor());
@@ -61,44 +61,6 @@ public class BookServiceTest {
         assertNotNull(result.getPrice());
         assertNotNull(result.getTitle());
         assertNotNull(result.getLinks());
-
-        // hateoas
-        // findById
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("findById")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("GET")
-        );
-        // update
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("update")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("PUT")
-        );
-        // delete
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("delete")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("DELETE")
-        );
-        // findAll
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("findAll")
-                        && link.getHref().endsWith("api/book/v1")
-                        && link.getType().equals("GET")
-        );
-        // create
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("create")
-                        && link.getHref().endsWith("api/book/v1")
-                        && link.getType().equals("POST")
-        );
-        assertEquals(5, result.getLinks().stream().count());
 
         // assertions data
         LocalDate today = LocalDate.now();
@@ -109,12 +71,38 @@ public class BookServiceTest {
         assertEquals(today.getMonth(), result.getLaunch().getMonth());
         assertEquals(today.getDayOfMonth(), result.getLaunch().getDayOfMonth());
         assertEquals(100, result.getPrice());
+
+        // hateoas
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("create")
+                        && link.getHref().endsWith("/api/v1/book")
+                        && link.getType().equals("POST")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("findById")
+                        && link.getHref().endsWith(String.format("/api/v1/book/%d", bookId))
+                        && link.getType().equals("GET")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("findAll")
+                        && link.getHref().endsWith("api/v1/book")
+                        && link.getType().equals("GET")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("update")
+                        && link.getHref().endsWith("api/v1/book/" + bookId)
+                        && link.getType().equals("PUT")
+        ));
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("delete")
+                        && link.getHref().endsWith("api/v1/book/" + bookId)
+                        && link.getType().equals("DELETE")
+        );
+        assertEquals(5, result.getLinks().stream().count());
     }
 
     @Test
     void findAll() {
-        final Long bookId = 1L;
-
         List<Book> books = input.mockEntityList();
         when(bookRepository.findAll()).thenReturn(books);
 
@@ -122,9 +110,10 @@ public class BookServiceTest {
 
         assertNotNull(results);
         for (int i = 0; i < results.size(); i++) {
-
+            final int bookId = i + 1;
             BookDTO result = results.get(i);
 
+            // not nulls
             assertNotNull(result.getId());
             assertNotNull(result.getAuthor());
             assertNotNull(result.getLaunch());
@@ -132,53 +121,49 @@ public class BookServiceTest {
             assertNotNull(result.getTitle());
             assertNotNull(result.getLinks());
 
-            // hateoas
-            // findById
-            result.getLinks().stream().anyMatch(link ->
-                    link.getRel()
-                            .value().equals("findById")
-                            && link.getHref().endsWith("api/book/v1/" + bookId)
-                            && link.getType().equals("GET")
-            );
-            // update
-            result.getLinks().stream().anyMatch(link ->
-                    link.getRel()
-                            .value().equals("update")
-                            && link.getHref().endsWith("api/book/v1/" + bookId)
-                            && link.getType().equals("PUT")
-            );
-            // delete
-            result.getLinks().stream().anyMatch(link ->
-                    link.getRel()
-                            .value().equals("delete")
-                            && link.getHref().endsWith("api/book/v1/" + bookId)
-                            && link.getType().equals("DELETE")
-            );
-            // findAll
-            result.getLinks().stream().anyMatch(link ->
-                    link.getRel()
-                            .value().equals("findAll")
-                            && link.getHref().endsWith("api/book/v1")
-                            && link.getType().equals("GET")
-            );
-            // create
-            result.getLinks().stream().anyMatch(link ->
-                    link.getRel()
-                            .value().equals("create")
-                            && link.getHref().endsWith("api/book/v1")
-                            && link.getType().equals("POST")
-            );
-            assertEquals(5, result.getLinks().stream().count());
-
             // assertions data
             LocalDate today = LocalDate.now();
-            assertEquals(i, result.getId());
-            assertEquals("author" + i, result.getAuthor());
-            assertEquals("Title" + i, result.getTitle());
+            assertEquals(i + 1, result.getId());
+            assertEquals("author" + (i + 1), result.getAuthor());
+            assertEquals("Title" + (i + 1), result.getTitle());
             assertEquals(today.getYear(), result.getLaunch().getYear());
             assertEquals(today.getMonth(), result.getLaunch().getMonth());
             assertEquals(today.getDayOfMonth(), result.getLaunch().getDayOfMonth());
             assertEquals(100, result.getPrice());
+
+            result.getLinks().forEach(link -> {
+                System.out.println(link.getRel().value());
+                System.out.println(link.getHref());
+                System.out.println(link.getType());
+            });
+
+            // hateoas
+            assertTrue(result.getLinks().stream().anyMatch(link ->
+                    link.getRel().value().equals("create")
+                            && link.getHref().endsWith("/api/v1/book")
+                            && link.getType().equals("POST")
+            ));
+            assertTrue(result.getLinks().stream().anyMatch(link ->
+                    link.getRel().value().equals("findById")
+                            && link.getHref().endsWith(String.format("/api/v1/book/%d", bookId))
+                            && link.getType().equals("GET")
+            ));
+            assertTrue(result.getLinks().stream().anyMatch(link ->
+                    link.getRel().value().equals("findAll")
+                            && link.getHref().endsWith("api/v1/book")
+                            && link.getType().equals("GET")
+            ));
+            assertTrue(result.getLinks().stream().anyMatch(link ->
+                    link.getRel().value().equals("update")
+                            && link.getHref().endsWith("api/v1/book/" + bookId)
+                            && link.getType().equals("PUT")
+            ));
+            result.getLinks().stream().anyMatch(link ->
+                    link.getRel().value().equals("delete")
+                            && link.getHref().endsWith("api/v1/book/" + bookId)
+                            && link.getType().equals("DELETE")
+            );
+            assertEquals(5, result.getLinks().stream().count());
         }
     }
 
@@ -193,50 +178,13 @@ public class BookServiceTest {
 
         BookDTO result = bookService.create(dto);
 
+        // not nulls
         assertNotNull(result.getId());
         assertNotNull(result.getAuthor());
         assertNotNull(result.getLaunch());
         assertNotNull(result.getPrice());
         assertNotNull(result.getTitle());
         assertNotNull(result.getLinks());
-
-        // hateoas
-        // findById
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("findById")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("GET")
-        );
-        // update
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("update")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("PUT")
-        );
-        // delete
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("delete")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("DELETE")
-        );
-        // findAll
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("findAll")
-                        && link.getHref().endsWith("api/book/v1")
-                        && link.getType().equals("GET")
-        );
-        // create
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("create")
-                        && link.getHref().endsWith("api/book/v1")
-                        && link.getType().equals("POST")
-        );
-        assertEquals(5, result.getLinks().stream().count());
 
         // assertions data
         LocalDate today = LocalDate.now();
@@ -247,6 +195,34 @@ public class BookServiceTest {
         assertEquals(today.getMonth(), result.getLaunch().getMonth());
         assertEquals(today.getDayOfMonth(), result.getLaunch().getDayOfMonth());
         assertEquals(100, result.getPrice());
+
+        // hateoas
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("create")
+                        && link.getHref().endsWith("/api/v1/book")
+                        && link.getType().equals("POST")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("findById")
+                        && link.getHref().endsWith(String.format("/api/v1/book/%d", bookId))
+                        && link.getType().equals("GET")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("findAll")
+                        && link.getHref().endsWith("api/v1/book")
+                        && link.getType().equals("GET")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("update")
+                        && link.getHref().endsWith("api/v1/book/" + bookId)
+                        && link.getType().equals("PUT")
+        ));
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("delete")
+                        && link.getHref().endsWith("api/v1/book/" + bookId)
+                        && link.getType().equals("DELETE")
+        );
+        assertEquals(5, result.getLinks().stream().count());
     }
 
     @Test
@@ -260,50 +236,13 @@ public class BookServiceTest {
         BookDTO dto = input.mockDTO(bookId.intValue());
         BookDTO result = bookService.update(bookId, dto);
 
+        // not nulls
         assertNotNull(result.getId());
         assertNotNull(result.getAuthor());
         assertNotNull(result.getLaunch());
         assertNotNull(result.getPrice());
         assertNotNull(result.getTitle());
         assertNotNull(result.getLinks());
-
-        // hateoas
-        // findById
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("findById")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("GET")
-        );
-        // update
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("update")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("PUT")
-        );
-        // delete
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("delete")
-                        && link.getHref().endsWith("api/book/v1/" + bookId)
-                        && link.getType().equals("DELETE")
-        );
-        // findAll
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("findAll")
-                        && link.getHref().endsWith("api/book/v1")
-                        && link.getType().equals("GET")
-        );
-        // create
-        result.getLinks().stream().anyMatch(link ->
-                link.getRel()
-                        .value().equals("create")
-                        && link.getHref().endsWith("api/book/v1")
-                        && link.getType().equals("POST")
-        );
-        assertEquals(5, result.getLinks().stream().count());
 
         // assertions data
         LocalDate today = LocalDate.now();
@@ -314,6 +253,34 @@ public class BookServiceTest {
         assertEquals(today.getMonth(), result.getLaunch().getMonth());
         assertEquals(today.getDayOfMonth(), result.getLaunch().getDayOfMonth());
         assertEquals(100, result.getPrice());
+
+        // hateoas
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("create")
+                        && link.getHref().endsWith("/api/v1/book")
+                        && link.getType().equals("POST")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("findById")
+                        && link.getHref().endsWith(String.format("/api/v1/book/%d", bookId))
+                        && link.getType().equals("GET")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("findAll")
+                        && link.getHref().endsWith("api/v1/book")
+                        && link.getType().equals("GET")
+        ));
+        assertTrue(result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("update")
+                        && link.getHref().endsWith("api/v1/book/" + bookId)
+                        && link.getType().equals("PUT")
+        ));
+        result.getLinks().stream().anyMatch(link ->
+                link.getRel().value().equals("delete")
+                        && link.getHref().endsWith("api/v1/book/" + bookId)
+                        && link.getType().equals("DELETE")
+        );
+        assertEquals(5, result.getLinks().stream().count());
     }
 
     @Test
